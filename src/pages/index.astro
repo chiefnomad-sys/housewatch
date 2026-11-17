@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Daily from '../components/Daily.astro';
+import StoryList from '../components/StoryList.astro';
+import ShortBox from '../components/ShortBox.astro';
+import { getStories, pickLead, storyUrl, mainBeat, mainBeatUrl, formatDate } from '../lib/content';
+import { BEATS } from '../site';
+
+const stories = await getStories();
+const lead = pickLead(stories);
+const latest = stories.filter((s) => s !== lead).slice(0, 8);
+const byBeat = BEATS.map((b) => ({ ...b, items: stories.filter((s) => s.data.beats.includes(b.name)).slice(0, 3) }));
+---
+<Base active="home" daily={false}>
+  <section class="blk wrap">
+    {lead ? (
+      <div class="lead-wrap">
+        <article class="lead">
+          <a class="kick" href={mainBeatUrl(lead)}>{mainBeat(lead)}</a>
+          <h1><a href={storyUrl(lead)}>{lead.data.title}</a></h1>
+          <p class="dek">{lead.data.dek}</p>
+          <p class="meta">{lead.data.author} · {formatDate(lead.data.date)}</p>
+          {lead.data.image && <a href={storyUrl(lead)}><img class="ph" src={lead.data.image} alt={lead.data.imageAlt ?? ''} /></a>}
+          <ShortBox story={lead} id="lead-short" />
+        </article>
+        <div>
+          <div class="sec-title"><h2>Latest</h2></div>
+          {latest.length ? <StoryList stories={latest} /> : <p class="empty">More stories land every weekday morning.</p>}
+        </div>
+      </div>
+    ) : (
+      <p class="empty">The first stories are on the way.</p>
+    )}
+  </section>
+
+  <Daily />
+
+  <section class="blk wrap">
+    <div class="beat-grid">
+      {byBeat.map((b) => (
+        <div class="beat-box">
+          <div class="sec-title"><h2><a href={`/${b.slug}/`}>{b.name}</a></h2><a class="more" href={`/${b.slug}/`}>All</a></div>
+          {b.items.length ? <StoryList stories={b.items} showBeat={false} /> : <p class="about">{b.about} First stories coming soon.</p>}
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

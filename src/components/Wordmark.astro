@@ -1,0 +1,12 @@
+---
+// The engine house sign wordmark: HOUSE, crossed axe and Halligan, WATCH in red.
+import { WORDMARK } from '../data/marks';
+const { class: cls = '', label = 'Housewatch' } = Astro.props;
+---
+<span class={`wordmark ${cls}`}>
+  <svg viewBox={WORDMARK.viewBox} role="img" aria-label={label}>
+    <path fill="currentColor" d={WORDMARK.house} />
+    <g fill="currentColor" set:html={WORDMARK.irons} />
+    <path class="w2" d={WORDMARK.watch} />
+  </svg>
+</span>

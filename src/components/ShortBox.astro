@@ -1,0 +1,19 @@
+---
+import { readMinutes, type Story } from '../lib/content';
+const { story, id = 'short-h', card = true } = Astro.props as { story: Story; id?: string; card?: boolean };
+const url = new URL(`/stories/${story.id}/`, Astro.site).href;
+---
+{story.data.short.length > 0 && (
+  <section class="short" aria-labelledby={id}>
+    <h2 id={id}>The short version</h2>
+    <ul>{story.data.short.map((line) => <li>{line}</li>)}</ul>
+    <div class="row">
+      <span class="meta">{readMinutes(story)} min read</span>
+      {card && (
+        <button type="button" class="textlink" data-card={`/cards/${story.id}.png`} data-file={`housewatch-${story.id}.png`} data-title={story.data.title} data-url={url}>
+          <svg class="i"><use href="#i-frame" /></svg>Share as card
+        </button>
+      )}
+    </div>
+  </section>
+)}

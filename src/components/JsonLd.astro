@@ -1,0 +1,6 @@
+---
+// Renders JSON-LD safely. Never write a raw ld+json script with template expressions.
+const { schema } = Astro.props;
+const json = JSON.stringify(schema).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" set:html={json} />

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /keystatic
+Sitemap: https://housewatch.news/sitemap-index.xml

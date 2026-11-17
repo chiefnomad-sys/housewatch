@@ -1,0 +1,20 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from './Base.astro';
+import { formatDate } from '../lib/content';
+const { slug } = Astro.props;
+const entry = await getEntry('pages', slug);
+if (!entry) throw new Error(`Missing page src/content/pages/${slug}.md`);
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} description={entry.data.description}>
+  <article class="page wrap">
+    <div class="col">
+      <h1>{entry.data.title}</h1>
+      {entry.data.description && <p class="dek">{entry.data.description}</p>}
+      {entry.data.updated && <p class="meta" style="margin-top:8px">Last updated {formatDate(entry.data.updated)}</p>}
+      <div class="body"><Content /></div>
+      <slot />
+    </div>
+  </article>
+</Base>

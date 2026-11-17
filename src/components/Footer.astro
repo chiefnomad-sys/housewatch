@@ -1,0 +1,26 @@
+---
+import Wordmark from './Wordmark.astro';
+import HMark from './HMark.astro';
+import { BEATS, SITE } from '../site';
+const year = new Date().getFullYear();
+---
+<footer class="foot">
+  <div class="wrap">
+    <div class="signoff">
+      <HMark />
+      <a href="/" aria-label="Housewatch home"><Wordmark /></a>
+    </div>
+    <p>{SITE.description} Reported from public records and published sources.</p>
+    <nav aria-label="Footer">
+      <ul>
+        {BEATS.map((b) => <li><a href={`/${b.slug}/`}>{b.name}</a></li>)}
+        <li><a href="/about/">About</a></li>
+        <li><a href="/corrections/">Corrections</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </nav>
+    <p class="fine">&copy; {year} Housewatch</p>
+  </div>
+</footer>

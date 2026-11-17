@@ -1,0 +1,86 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Daily from '../../components/Daily.astro';
+import ShortBox from '../../components/ShortBox.astro';
+import StoryList from '../../components/StoryList.astro';
+import HMark from '../../components/HMark.astro';
+import { getStories, mainBeat, readMinutes, formatDate, type Story } from '../../lib/content';
+import { beatSlug } from '../../site';
+import JsonLd from '../../components/JsonLd.astro';
+
+export async function getStaticPaths() {
+  const stories = await getStories();
+  return stories.map((s) => ({ params: { slug: s.id }, props: { story: s, all: stories } }));
+}
+const { story, all } = Astro.props as { story: Story; all: Story[] };
+const { Content } = await render(story);
+const d = story.data;
+const url = new URL(`/stories/${story.id}/`, Astro.site).href;
+const sameBeat = all.filter((s) => s !== story && s.data.beats.some((b) => d.beats.includes(b)));
+const more = [...sameBeat, ...all.filter((s) => s !== story && !sameBeat.includes(s))].slice(0, 3);
+---
+<Base title={d.title} description={d.dek} ogImage={`/og/${story.id}.png`} ogType="article" published={d.date.toISOString()} section={mainBeat(story)} daily={false}>
+  <JsonLd slot="head" schema={{
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: d.title,
+    description: d.dek,
+    datePublished: d.date.toISOString(),
+    image: [new URL(`/og/${story.id}.png`, Astro.site).href],
+    author: { '@type': 'Organization', name: d.author },
+    publisher: { '@type': 'Organization', name: 'Housewatch', url: Astro.site?.href },
+    mainEntityOfPage: url,
+    articleSection: mainBeat(story),
+  }} />
+  <article class="article wrap">
+    <div class="col">
+      <div class="ahead">
+        <div class="kicks">
+          {d.beats.map((b, i) => (<>{i > 0 && <span class="dot" />}<a class="kick" href={`/${beatSlug(b)}/`}>{b}</a></>))}
+        </div>
+        <h1>{d.title}</h1>
+        <p class="dek">{d.dek}</p>
+        <div class="byline">
+          <div class="who">{d.author}<span>{formatDate(d.date)} · {readMinutes(story)} min read</span></div>
+          <button type="button" class="crew" data-share data-url={url} data-title={d.title}><svg class="i"><use href="#i-people" /></svg>Share with the crew</button>
+        </div>
+      </div>
+      {d.image && (
+        <figure class="hero">
+          <img src={d.image} alt={d.imageAlt ?? ''} />
+          {(d.imageCaption || d.imageCredit) && <figcaption>{d.imageCaption} {d.imageCredit}</figcaption>}
+        </figure>
+      )}
+      <ShortBox story={story} />
+      <div class="body"><Content /></div>
+      <div class="endmark"><HMark /></div>
+      {d.corrections.length > 0 && (
+        <section class="fixes" aria-labelledby="fix-h">
+          <h2 id="fix-h">Corrections</h2>
+          {d.corrections.map((c) => <p>{formatDate(c.date)}: {c.note}</p>)}
+        </section>
+      )}
+      <section class="sources" aria-labelledby="src-h">
+        <h2 id="src-h">Sources</h2>
+        {d.sources.length > 0 && (
+          <ol>{d.sources.map((s) => <li>{s.url ? <a href={s.url} rel="noopener">{s.title}</a> : s.title}</li>)}</ol>
+        )}
+        <p>Housewatch reports from public records and published sources. See something wrong? <a href="/contact/?about=correction">Send a correction</a>.</p>
+      </section>
+      {more.length > 0 && (
+        <section class="more" aria-labelledby="more-h">
+          <h2 class="t" id="more-h">Keep reading</h2>
+          <StoryList stories={more} />
+        </section>
+      )}
+    </div>
+  </article>
+  <Daily />
+  <nav class="dock" aria-label="Story actions" slot="after-main">
+    <div class="wrap in">
+      <button type="button" class="crew" data-share data-url={url} data-title={d.title}><svg class="i"><use href="#i-people" /></svg>Share with the crew</button>
+      <a class="daily-link" href="#daily"><svg class="i"><use href="#i-mail" /></svg>Daily</a>
+    </div>
+  </nav>
+</Base>

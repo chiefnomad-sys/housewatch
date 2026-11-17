@@ -1,0 +1,27 @@
+---
+// Housewatch Daily signup. Uses Netlify Forms for now (entries show under Forms in Netlify);
+// swap the action for a newsletter provider later without changing the look.
+import HMark from './HMark.astro';
+const { id = 'daily' } = Astro.props;
+---
+<section class="daily" id={id} aria-labelledby={`${id}-h`}>
+  <div class="wrap inner">
+    <div>
+      <div class="daily-head">
+        <HMark />
+        <h2 class="daily-word" id={`${id}-h`}>Housewatch <em>Daily</em></h2>
+      </div>
+      <p class="pitch" style="margin-top:12px">The stories that matter to your paycheck, your health and the job, every weekday morning before roll call.</p>
+    </div>
+    <div>
+      <form name="daily" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="company" data-signup>
+        <input type="hidden" name="form-name" value="daily" />
+        <p class="hp"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+        <label class="vh" for={`${id}-email`}>Email address</label>
+        <input id={`${id}-email`} type="email" name="email" inputmode="email" autocomplete="email" placeholder="you@email.com" required />
+        <button class="go" type="submit">Get Housewatch Daily</button>
+      </form>
+      <p class="fine" data-fine role="status">Free. One email a weekday. Stop anytime.</p>
+    </div>
+  </div>
+</section>

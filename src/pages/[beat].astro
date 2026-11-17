@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import StoryList from '../components/StoryList.astro';
+import { getStories } from '../lib/content';
+import { BEATS } from '../site';
+
+export async function getStaticPaths() {
+  return BEATS.map((b) => ({ params: { beat: b.slug }, props: { beat: b } }));
+}
+const { beat } = Astro.props;
+const stories = (await getStories()).filter((s) => s.data.beats.includes(beat.name));
+---
+<Base title={beat.name} description={`${beat.name}: ${beat.about}`} active={beat.slug}>
+  <section class="blk wrap">
+    <div class="col" style="margin:0">
+      <div class="sec-title"><h1 style="font-size:clamp(32px,8vw,48px);text-transform:uppercase">{beat.name}</h1></div>
+      <p class="dek" style="margin-block:10px 8px">{beat.about}</p>
+      {stories.length ? <StoryList stories={stories} showBeat={false} /> : <p class="empty">First {beat.name} stories coming soon.</p>}
+    </div>
+  </section>
+</Base>

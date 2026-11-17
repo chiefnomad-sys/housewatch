@@ -1,0 +1,22 @@
+---
+import Wordmark from './Wordmark.astro';
+import { BEATS, SITE } from '../site';
+const { active = '' } = Astro.props;
+---
+<header class="top">
+  <div class="wrap row">
+    <a href="/" aria-label="Housewatch home"><Wordmark /></a>
+    <span class="tag meta">{SITE.tagline}</span>
+    <a class="join-btn" href="#daily">Get the Daily</a>
+  </div>
+</header>
+<nav class="beats" aria-label="Beats">
+  <div class="wrap">
+    <ul>
+      <li><a href="/" aria-current={active === 'home' ? 'page' : undefined}>Latest</a></li>
+      {BEATS.map((b) => (
+        <li><a href={`/${b.slug}/`} aria-current={active === b.slug ? 'page' : undefined}>{b.name}</a></li>
+      ))}
+    </ul>
+  </div>
+</nav>

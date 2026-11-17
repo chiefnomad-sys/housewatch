@@ -1,0 +1,25 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page slug="contact">
+  <form name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="company">
+    <input type="hidden" name="form-name" value="contact" />
+    <p class="hp"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+    <label for="c-about">What's this about?</label>
+    <select id="c-about" name="about">
+      <option value="tip">A story tip</option>
+      <option value="correction">A correction</option>
+      <option value="other">Something else</option>
+    </select>
+    <label for="c-msg">Message</label>
+    <textarea id="c-msg" name="message" required></textarea>
+    <label for="c-email">Your email (optional, if you want a reply)</label>
+    <input id="c-email" type="email" name="email" autocomplete="email" />
+    <button type="submit">Send</button>
+  </form>
+  <script>
+    const about = new URLSearchParams(location.search).get('about');
+    const sel = document.getElementById('c-about') as HTMLSelectElement | null;
+    if (sel && about && [...sel.options].some((o) => o.value === about)) sel.value = about;
+  </script>
+</Page>

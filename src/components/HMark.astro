@@ -1,0 +1,12 @@
+---
+// The gothic H with the bar under it (the merch mark), used as an accent.
+import { HMARK } from '../data/marks';
+const { class: cls = '', label } = Astro.props;
+const b = HMARK.bar;
+---
+<span class={`hmark ${cls}`}>
+  <svg viewBox={HMARK.viewBox} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+    <path fill="currentColor" d={HMARK.h} />
+    <rect class="bar" x={b.x} y={b.y} width={b.w} height={b.h} />
+  </svg>
+</span>

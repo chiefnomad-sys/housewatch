@@ -1,0 +1,31 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# housewatch.news is the main address. Send homewatch.news, the www names and the
+# Netlify address there, keeping the page path. Deploy previews are unaffected.
+[[redirects]]
+  from = "https://homewatch.news/*"
+  to = "https://housewatch.news/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.homewatch.news/*"
+  to = "https://housewatch.news/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.housewatch.news/*"
+  to = "https://housewatch.news/:splat"
+  status = 301
+  force = true
+
+[[headers]]
+  for = "/cards/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

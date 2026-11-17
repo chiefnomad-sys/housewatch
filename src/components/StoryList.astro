@@ -1,0 +1,17 @@
+---
+import { storyUrl, mainBeat, formatShort, type Story } from '../lib/content';
+const { stories = [] as Story[], showBeat = true } = Astro.props;
+---
+<ul class="feed">
+  {stories.map((s) => (
+    <li>
+      <a href={storyUrl(s)}>
+        <time datetime={s.data.date.toISOString().slice(0, 10)}>{formatShort(s.data.date)}</time>
+        <span>
+          {showBeat && <span class="sec">{mainBeat(s)}</span>}
+          <h3>{s.data.title}</h3>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>

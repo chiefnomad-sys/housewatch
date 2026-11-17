@@ -1,0 +1,17 @@
+---
+import Page from '../layouts/Page.astro';
+import { getStories, storyUrl, formatDate } from '../lib/content';
+const fixes = (await getStories())
+  .flatMap((s) => s.data.corrections.map((c) => ({ ...c, story: s })))
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+<Page slug="corrections">
+  <h2 style="margin-top:28px;font-size:16px;letter-spacing:.12em;text-transform:uppercase;border-bottom:3px solid var(--ink);padding-bottom:6px">Corrections log</h2>
+  {fixes.length ? (
+    <ul class="fixlist">
+      {fixes.map((f) => <li><p class="meta">{formatDate(f.date)}</p><p><a href={storyUrl(f.story)}><b>{f.story.data.title}</b></a></p><p>{f.note}</p></li>)}
+    </ul>
+  ) : (
+    <p class="empty">No corrections yet.</p>
+  )}
+</Page>
