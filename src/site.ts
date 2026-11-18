@@ -4,7 +4,7 @@ export const SITE = {
   url: 'https://housewatch.news',
   tagline: 'News for the rank and file',
   description: 'Independent news for the everyday firefighter: your paycheck, your health and the job.',
-  look: 'white' as 'white' | 'black',
+  look: 'black' as 'white' | 'black',
 };
 
 export const BEATS = [
