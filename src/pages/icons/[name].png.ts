@@ -3,10 +3,10 @@ import { appIcon } from '../../cards/render';
 
 // Icons for the home screen (web app manifest) and Android's install prompt.
 const ICONS: Record<string, [number, number]> = {
-  'icon-192': [192, 0.58],
-  'icon-512': [512, 0.58],
-  'maskable-192': [192, 0.4],
-  'maskable-512': [512, 0.4],
+  'icon-192': [192, 0.78],
+  'icon-512': [512, 0.78],
+  'maskable-192': [192, 0.6],
+  'maskable-512': [512, 0.6],
 };
 
 export function getStaticPaths() {

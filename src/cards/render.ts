@@ -100,15 +100,20 @@ export async function previewImage({ title, beat }: CardInput) {
   );
 }
 
-// Home screen and browser icons: the gothic H with its red bar on black.
-// scale is the H's width as a share of the icon; maskable icons use a smaller one so
-// Android's round or squircle crop never clips the H.
-export async function appIcon(size: number, scale = 0.58) {
-  return toPng(
-    h('div', { width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', background: INK }, [
-      img(uri(hmarkSvg()), Math.round(size * scale), Math.round(size * scale * 1.25)),
-    ]),
-    size,
-    size
-  );
+// Home screen and browser icons: the gothic H with its red bar on black, cropped tight
+// so it reads at favicon size. fill is how much of the icon's height the mark takes up;
+// maskable icons use less so Android's round or squircle crop never clips it.
+const ICON_BOX = { x: 126, y: 63, w: 260, h: 377 }; // the H plus a bolder bar
+export function iconSvg(size: number, fill: number, radius = 0) {
+  const k = (size * fill) / ICON_BOX.h;
+  const tx = (size - ICON_BOX.w * k) / 2 - ICON_BOX.x * k;
+  const ty = (size - ICON_BOX.h * k) / 2 - ICON_BOX.y * k;
+  const b = HMARK.bar;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">` +
+    `<rect width="${size}" height="${size}" rx="${radius}" fill="${INK}"/>` +
+    `<g transform="translate(${tx.toFixed(2)} ${ty.toFixed(2)}) scale(${k.toFixed(4)})">` +
+    `<path fill="${WHITE}" d="${HMARK.h}"/><rect x="${b.x}" y="406" width="${b.w}" height="34" fill="${RED}"/></g></svg>`;
+}
+export async function appIcon(size: number, fill = 0.78) {
+  return new Resvg(iconSvg(size, fill), { fitTo: { mode: 'width', value: size } }).render().asPng();
 }
