@@ -19,6 +19,6 @@ export default defineConfig({
   integrations: [
     react(),
     ...(previewFiles ? [] : [keystatic()]),
-    sitemap({ filter: (page) => !page.includes('/keystatic') && !page.includes('/thanks') }),
+    sitemap({ filter: (page) => !page.includes('/keystatic') && !page.includes('/thanks') && !page.includes('/offline') }),
   ],
 });

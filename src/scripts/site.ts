@@ -135,3 +135,72 @@ document.querySelectorAll<HTMLFormElement>('form[data-signup]').forEach((form) =
     }
   })
 );
+
+// Add to home screen. Android and desktop Chrome fire beforeinstallprompt, which we hold
+// and replay from our own Add button. iPhone Safari can't prompt, so it gets the Share hint.
+(() => {
+  const box = document.getElementById('a2hs');
+  if (!box) return;
+  const KEY = 'hw-a2hs';
+  const store = {
+    get(k: string) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k: string, v: string) { try { localStorage.setItem(k, v); } catch { /* private mode */ } },
+  };
+  const ua = navigator.userAgent;
+  const ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const mobile = ios || /android|mobile/i.test(ua);
+  const installed = matchMedia('(display-mode: standalone)').matches || (navigator as { standalone?: boolean }).standalone === true;
+  const addBtn = box.querySelector<HTMLButtonElement>('[data-a2hs-add]')!;
+  const androidText = box.querySelector<HTMLElement>('[data-a2hs-android]')!;
+  const iosText = box.querySelector<HTMLElement>('[data-a2hs-ios]')!;
+  let deferred: (Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> }) | null = null;
+
+  const show = (force = false) => {
+    if (installed) { if (force) toast('Housewatch is already on your home screen.'); return; }
+    const iosMode = ios || (!deferred && force);
+    iosText.hidden = !iosMode;
+    androidText.hidden = iosMode;
+    addBtn.hidden = !deferred;
+    box.hidden = false;
+  };
+  const hide = (remember: boolean) => {
+    box.hidden = true;
+    if (remember) store.set(KEY, 'dismissed');
+  };
+
+  addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferred = e as typeof deferred;
+    if (!box.hidden) addBtn.hidden = false;
+  });
+  addEventListener('appinstalled', () => { hide(true); deferred = null; });
+
+  addBtn.addEventListener('click', async () => {
+    if (!deferred) return;
+    await deferred.prompt();
+    await deferred.userChoice.catch(() => null);
+    deferred = null;
+    hide(true);
+  });
+  box.querySelector('[data-a2hs-close]')?.addEventListener('click', () => hide(true));
+
+  // Footer link and the #homescreen link always open it, even after a dismissal.
+  document.querySelectorAll('[data-a2hs-open]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); show(true); })
+  );
+  if (location.hash === '#homescreen') { show(true); return; }
+
+  // Otherwise, once per reader: phones only, on their second page or after 25 seconds.
+  if (!mobile || installed || store.get(KEY)) return;
+  const views = Number(store.get('hw-views') || '0') + 1;
+  store.set('hw-views', String(views));
+  const ready = () => { if (!store.get(KEY) && box.hidden) show(); };
+  if (views >= 2) setTimeout(ready, 4000);
+  else setTimeout(ready, 25000);
+})();
+
+// Service worker: a short offline notice for home screen readers. Real site only.
+const swUrl = document.documentElement.dataset.sw;
+if (swUrl && 'serviceWorker' in navigator && location.protocol === 'https:') {
+  addEventListener('load', () => navigator.serviceWorker.register(swUrl).catch(() => {}));
+}

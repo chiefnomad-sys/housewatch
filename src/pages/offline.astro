@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import HMark from '../components/HMark.astro';
+---
+<Base title="Offline" daily={false}>
+  <article class="page wrap"><div class="col" style="text-align:center">
+    <div style="width:64px;margin:10px auto 18px"><HMark /></div>
+    <h1>No signal.</h1>
+    <p class="dek">Housewatch needs a connection to load the news. Try again when you've got bars.</p>
+    <p style="margin-top:16px"><a class="textlink" href="/">Try again</a></p>
+  </div></article>
+</Base>

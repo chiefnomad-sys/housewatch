@@ -1,0 +1,20 @@
+---
+// "Add Housewatch to your home screen" prompt. Hidden until site.ts decides to show it:
+// mobile only, never inside the installed app, after a reader's second page or 25 seconds,
+// and never again once dismissed. Android gets a real Add button; iPhone gets the two-tap hint.
+---
+<aside class="a2hs" id="a2hs" aria-label="Add Housewatch to your home screen" hidden>
+  <img class="a2hs-icon" src="/apple-touch-icon.png" width="52" height="52" alt="" />
+  <div class="a2hs-copy">
+    <p class="a2hs-title">Put Housewatch on your phone</p>
+    <p class="a2hs-text" data-a2hs-android>One tap and the H sits on your home screen, like an app.</p>
+    <p class="a2hs-text" data-a2hs-ios hidden>
+      Tap <svg class="a2hs-share" viewBox="0 0 24 24" aria-label="Share"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 11v9h14v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Share, then <strong>Add to Home Screen</strong>.
+    </p>
+  </div>
+  <div class="a2hs-actions">
+    <button type="button" class="a2hs-add" data-a2hs-add>Add</button>
+    <button type="button" class="a2hs-x" data-a2hs-close aria-label="Not now">Not now</button>
+  </div>
+</aside>

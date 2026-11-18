@@ -100,10 +100,13 @@ export async function previewImage({ title, beat }: CardInput) {
   );
 }
 
-export async function appIcon(size: number) {
+// Home screen and browser icons: the gothic H with its red bar on black.
+// scale is the H's width as a share of the icon; maskable icons use a smaller one so
+// Android's round or squircle crop never clips the H.
+export async function appIcon(size: number, scale = 0.58) {
   return toPng(
     h('div', { width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', background: INK }, [
-      img(uri(hmarkSvg()), Math.round(size * 0.62), Math.round(size * 0.62 * 1.25)),
+      img(uri(hmarkSvg()), Math.round(size * scale), Math.round(size * scale * 1.25)),
     ]),
     size,
     size
