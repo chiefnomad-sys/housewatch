@@ -171,7 +171,8 @@ document.querySelectorAll<HTMLFormElement>('form[data-signup]').forEach((form) =
   addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferred = e as typeof deferred;
-    if (!box.hidden) addBtn.hidden = false;
+    // If the bar is already up, swap the iPhone hint for the one-tap Add button.
+    if (!box.hidden && !ios) { addBtn.hidden = false; iosText.hidden = true; androidText.hidden = false; }
   });
   addEventListener('appinstalled', () => { hide(true); deferred = null; });
 
