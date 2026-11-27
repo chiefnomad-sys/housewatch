@@ -1,0 +1,16 @@
+---
+// The pull quote call-out in a story's top third. Quotes come only from public,
+// attributed sources, word for word.
+const { text, attribution, source } = Astro.props as { text: string; attribution?: string; source?: string };
+const who = attribution?.trim();
+const where = source?.trim();
+---
+<figure class="pull">
+  <blockquote><p>{text.trim()}</p></blockquote>
+  {(who || where) && (
+    <figcaption>
+      {who && <span class="who">{who}</span>}
+      {where && <cite>{where}</cite>}
+    </figcaption>
+  )}
+</figure>

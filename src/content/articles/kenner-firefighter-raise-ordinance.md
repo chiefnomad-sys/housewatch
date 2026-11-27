@@ -9,6 +9,11 @@ short:
   - The Kenner, La., City Council voted 5-1 on Nov. 20 to give every full-time firefighter a 2% raise each year again, including newer firefighters and those past year 23 who were cut out of it in 2023.
   - Mayor Mike Glaser says the timing is wrong and has hinted at a veto, and the city attorney says only the mayor can set those salaries.
 featured: false
+pull_quote:
+  text: We’re not asking for special treatment. We’re asking for fair recognition of years of service.
+  attribution: Capt. Thomas Caragliano, Kenner Fire Department
+  source: WDSU
+  after_paragraph: 3
 sources:
   - title: 'Fox 8: Kenner council passes ordinance to reinstate annual pay raises for all firefighters'
     url: https://www.fox8live.com/2026/11/20/kenner-council-passes-ordinance-reinstate-annual-pay-raises-all-firefighters/
