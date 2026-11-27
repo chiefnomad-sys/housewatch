@@ -65,6 +65,15 @@ export default config({
         imageAlt: fields.text({ label: 'Photo description (alt text)', multiline: true }),
         imageCaption: fields.text({ label: 'Photo caption', multiline: true }),
         imageCredit: fields.text({ label: 'Photo credit and license' }),
+        pull_quote: fields.object(
+          {
+            text: fields.text({ label: 'Quote', description: 'Word for word, from a public, attributed source. Leave empty for no pull quote.', multiline: true }),
+            attribution: fields.text({ label: 'Who said it', description: 'Name and title, for example Capt. Jane Doe, Springfield Fire Department.' }),
+            source: fields.text({ label: 'Where it was published', description: 'Optional, for example The Morning Call.' }),
+            after_paragraph: fields.integer({ label: 'Show after paragraph', description: '1 to 6. Keep it in the top third of the story.', defaultValue: 2, validation: { min: 1, max: 6 } }),
+          },
+          { label: 'Pull quote', description: 'Optional call-out shown near the top of the story.' }
+        ),
         sources: fields.array(
           fields.object({ title: fields.text({ label: 'Source', validation: { isRequired: true } }), url: fields.url({ label: 'URL' }) }),
           { label: 'Sources', itemLabel: (props) => props.fields.title.value || 'Source' }

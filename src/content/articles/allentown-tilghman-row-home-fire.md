@@ -10,6 +10,11 @@ short:
   - Crews fought it from inside and from the rooftops until two roofs collapsed and two buildings were too unstable to enter.
   - Officials said hidden voids in the older construction complicated the fight. Three firefighters had minor injuries and have been released.
 featured: false
+pull_quote:
+  text: It just kept getting bigger and bigger and going from house to house.
+  attribution: Patricia Deginto, Allentown resident
+  source: 6abc
+  after_paragraph: 3
 sources:
   - title: 'The Morning Call, via FireRescue1: 5-alarm fire damages up to 8 Pa. row homes'
     url: https://www.firerescue1.com/structure-fire/5-alarm-fire-damages-up-to-8-pa-row-homes

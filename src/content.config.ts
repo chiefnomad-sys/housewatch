@@ -18,6 +18,15 @@ const articles = defineCollection({
     imageAlt: z.string().optional(),
     imageCaption: z.string().optional(),
     imageCredit: z.string().optional(),
+    // Optional call-out near the top of the story. Placed by src/lib/rehype-pull-quote.mjs.
+    pull_quote: z
+      .object({
+        text: z.string().optional(),
+        attribution: z.string().optional(),
+        source: z.string().optional(),
+        after_paragraph: z.coerce.number().int().min(1).max(6).optional(),
+      })
+      .optional(),
     sources: z.array(z.object({ title: z.string(), url: z.string().url().optional().or(z.literal('')) })).default([]),
     corrections: z.array(z.object({ date: z.coerce.date(), note: z.string() })).default([]),
     draft: z.boolean().default(false),
